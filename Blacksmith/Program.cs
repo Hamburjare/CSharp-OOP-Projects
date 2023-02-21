@@ -26,7 +26,6 @@ class Program
 {
     static void Main(string[] args)
     {
-       
         SwordBuilder builder = new SwordBuilder();
         Sword sword = new Sword(
             builder.SelectSwordPointType(),
@@ -35,11 +34,11 @@ class Program
         );
         int price = sword.GetPrice();
         Console.WriteLine($"Sword's price will be: {price} golds");
-        
     }
 }
 
-class SwordPrices { 
+class SwordPrices
+{
     // Sword Point
     public static int PronzeSwordPrice = 5;
     public static int MetalSwordPrice = 10;
@@ -57,7 +56,8 @@ class SwordPrices {
     public static int WindStoneSwordPrice = 18;
 }
 
-class SwordBuilder {
+class SwordBuilder
+{
     int ReadNumber()
     {
         int number;
@@ -85,6 +85,9 @@ class SwordBuilder {
                 return SwordPointType.Metal;
             case 3:
                 return SwordPointType.Mithril;
+            default:
+                Console.WriteLine("Invalid input. Try again.");
+                return SelectSwordPointType();
         }
     }
 
@@ -105,6 +108,9 @@ class SwordBuilder {
                 return SwordHandleType.MetalwithLeather;
             case 3:
                 return SwordHandleType.DragonBone;
+            default:
+                Console.WriteLine("Invalid input. Try again.");
+                return SelectSwordHandleType();
         }
     }
 
@@ -128,11 +134,15 @@ class SwordBuilder {
                 return GemStone.EarthStone;
             case 4:
                 return GemStone.WindStone;
+            default:
+                Console.WriteLine("Invalid input. Try again.");
+                return SelectGemStone();
         }
     }
 }
 
-class Sword {
+class Sword
+{
     public SwordPointType SwordPointType { get; set; }
     public SwordHandleType SwordHandleType { get; set; }
     public GemStone GemStone { get; set; }
