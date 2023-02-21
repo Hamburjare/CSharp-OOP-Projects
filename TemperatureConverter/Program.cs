@@ -7,7 +7,7 @@ public class LampotilaTesti
         Console.WriteLine("1. Celsius-asteita fahrenheit-asteiksi.");
         Console.WriteLine("2. Fahrenheit-asteita celsius-asteiksi.");
 
-        string selection = Console.ReadLine();
+        string? selection = Console.ReadLine();
 
         switch (selection)
         {
