@@ -113,15 +113,17 @@ class Program
                     if (gold != null)
                     {
                         string goldPut = chest.PutGold(int.Parse(gold));
-                        if (goldPut == "error")
+                        if (goldPut == "done")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("You put {0} gold in the chest", gold);
+                            Console.ResetColor();
+                        }
+                        else if (goldPut == "error")
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("You can't put negative gold in the chest");
                             Console.ResetColor();
-                        }
-                        else if (goldPut != "not open")
-                        {
-                            Console.WriteLine("You put {0} gold in the chest", gold);
                         }
                         else
                         {
@@ -140,17 +142,19 @@ class Program
                     if (gold != null)
                     {
                         string goldTake = chest.TakeGold(int.Parse(gold));
-                        if (goldTake == "error")
+                        if (goldTake == "done")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.WriteLine("You took {0} gold from the chest", gold);
+                            Console.ResetColor();
+                        }
+                        else if (goldTake == "error")
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine(
                                 "You can't take negative gold from the chest or more than there is in the chest"
                             );
                             Console.ResetColor();
-                        }
-                        else if (goldTake != "not open")
-                        {
-                            Console.WriteLine("You took {0} gold from the chest", gold);
                         }
                         else
                         {
