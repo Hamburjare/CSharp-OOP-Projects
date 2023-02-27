@@ -104,20 +104,56 @@ class ArrowBuilder
 
 class ArrowPrices
 {
-    public static int WoodPointPrice = 3;
-    public static int MetalPointPrice = 5;
-    public static int DiamondPointPrice = 50;
-    public static int LeafFetchPrice = 0;
-    public static int ChickenFeatherFetchPrice = 1;
-    public static int EagleFeatherFetchPrice = 5;
-    public static float ShaftPricePerCentiMeter = 0.05f;
+    static int WoodPointPrice = 3;
+    static int MetalPointPrice = 5;
+    static int DiamondPointPrice = 50;
+    static int LeafFetchPrice = 0;
+    static int ChickenFeatherFetchPrice = 1;
+    static int EagleFeatherFetchPrice = 5;
+    static float ShaftPricePerCentiMeter = 0.05f;
+
+    public static int GetWoodPointPrice()
+    {
+        return WoodPointPrice;
+    }
+
+    public static int GetMetalPointPrice()
+    {
+        return MetalPointPrice;
+    }
+
+    public static int GetDiamondPointPrice()
+    {
+        return DiamondPointPrice;
+    }
+
+    public static int GetLeafFetchPrice()
+    {
+        return LeafFetchPrice;
+    }
+
+    public static int GetChickenFeatherFetchPrice()
+    {
+        return ChickenFeatherFetchPrice;
+    }
+
+    public static int GetEagleFeatherFetchPrice()
+    {
+        return EagleFeatherFetchPrice;
+    }
+
+    public static float GetShaftPricePerCentiMeter()
+    {
+        return ShaftPricePerCentiMeter;
+    }
+
 }
 
 class Arrow
 {
-    public ArrowPointType pointType;
-    public ArrowFetchType fetchType;
-    public int shaftLength;
+    ArrowPointType pointType;
+    ArrowFetchType fetchType;
+    int shaftLength;
 
     public Arrow(ArrowPointType pointType, ArrowFetchType fetchType, int shaftLength)
     {
@@ -132,28 +168,28 @@ class Arrow
         switch (pointType)
         {
             case ArrowPointType.Wood:
-                price += ArrowPrices.WoodPointPrice;
+                price += ArrowPrices.GetWoodPointPrice();
                 break;
             case ArrowPointType.Metal:
-                price += ArrowPrices.MetalPointPrice;
+                price += ArrowPrices.GetMetalPointPrice();
                 break;
             case ArrowPointType.Diamond:
-                price += ArrowPrices.DiamondPointPrice;
+                price += ArrowPrices.GetDiamondPointPrice();
                 break;
         }
         switch (fetchType)
         {
             case ArrowFetchType.Leaf:
-                price += ArrowPrices.LeafFetchPrice;
+                price += ArrowPrices.GetLeafFetchPrice();
                 break;
             case ArrowFetchType.ChickenFeather:
-                price += ArrowPrices.ChickenFeatherFetchPrice;
+                price += ArrowPrices.GetChickenFeatherFetchPrice();
                 break;
             case ArrowFetchType.EagleFeather:
-                price += ArrowPrices.EagleFeatherFetchPrice;
+                price += ArrowPrices.GetEagleFeatherFetchPrice();
                 break;
         }
-        price += (int)(ArrowPrices.ShaftPricePerCentiMeter * shaftLength);
+        price += (int)(ArrowPrices.GetShaftPricePerCentiMeter() * shaftLength);
         return price;
     }
 }
