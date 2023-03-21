@@ -22,8 +22,57 @@ class Program
         {
             Monster monsterAI = CreateRandomMonster();
             Fight(player, monsterAI);
-        }
+            if (!player.IsAlive())
+            {
+                break;
+            }
+            Console.WriteLine(new string('-', Console.WindowWidth));
 
+            player.PrintStats();
+            Console.WriteLine(new string('-', Console.WindowWidth));
+
+            Shop(player);
+        }
+        if (player.IsAlive())
+        {
+            Console.WriteLine("You won the turnament!");
+        }
+        else
+        {
+            Console.WriteLine("You lost the turnament!");
+        }
+    }
+
+    public static void Shop(Monster player)
+    {
+        Console.WriteLine("Welcome to the shop!");
+        Console.WriteLine("What would you like to buy?");
+        Console.WriteLine("1. Health Potion");
+        Console.WriteLine("2. Mana Potion");
+        while (true)
+        {
+            string? choice2 = Console.ReadLine();
+            switch (choice2)
+            {
+                case "1":
+                    Console.WriteLine("You bought a health potion! And it healed you!");
+
+                    player.RestoreHealth();
+                    return;
+                case "2":
+                    Console.WriteLine("You bought a mana potion! And it restored your mana!");
+
+                    player.RestoreMana();
+                    return;
+
+                default:
+                    Console.WriteLine("Invalid choice.");
+                    continue;
+            }
+            return;
+        }
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadKey();
     }
 
     public static void Fight(Monster player, Monster monsterAI)
@@ -43,9 +92,11 @@ class Program
             AIsTurn(player, monsterAI);
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey();
+            Console.Clear();
         }
         if (player.IsAlive())
         {
+            Console.Clear();
             Console.WriteLine($"{player.GetName()} won the fight!");
         }
         else
@@ -177,8 +228,8 @@ class Program
             "Dave",
             "Jeff"
         };
-        string name = names[random.Next(0, names.Length + 1)];
-        Elements element = (Elements)random.Next(0, Enum.GetNames(typeof(Elements)).Length + 1);
+        string name = names[random.Next(0, names.Length)];
+        Elements element = (Elements)random.Next(0, Enum.GetNames(typeof(Elements)).Length);
         return new Monster($"{name} (AI)", element);
     }
 }
@@ -232,9 +283,34 @@ class Monster
         this.health -= damage;
     }
 
+    public void RestoreHealth()
+    {
+        health = maxHealth;
+    }
+
     public float GetHealth()
     {
         return this.health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return this.maxHealth;
+    }
+
+    public void RestoreMana()
+    {
+        mana = maxMana;
+    }
+
+    public float GetMana()
+    {
+        return this.mana;
+    }
+
+    public float GetMaxMana()
+    {
+        return this.maxMana;
     }
 
     public int DefaultAttack()
