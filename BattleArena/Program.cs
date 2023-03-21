@@ -15,9 +15,15 @@ class Program
 {
     static void Main(string[] args)
     {
+        int rounds = 3;
         Monster player = CreateMonster();
-        Monster monsterAI = CreateRandomMonster();
-        Fight(player, monsterAI);
+
+        for (int i = 0; i <= rounds; i++)
+        {
+            Monster monsterAI = CreateRandomMonster();
+            Fight(player, monsterAI);
+        }
+
     }
 
     public static void Fight(Monster player, Monster monsterAI)
