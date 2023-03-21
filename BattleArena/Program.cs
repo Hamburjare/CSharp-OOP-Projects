@@ -18,7 +18,7 @@ class Program
         int rounds = 3;
         Monster player = CreateMonster();
 
-        for (int i = 0; i <= rounds; i++)
+        for (int i = 0; i < rounds; i++)
         {
             Monster monsterAI = CreateRandomMonster();
             Fight(player, monsterAI);
