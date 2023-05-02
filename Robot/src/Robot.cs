@@ -26,9 +26,9 @@ public class Robot
         set => isOn = value;
     }
 
-    private List<Command> commands = new List<Command>();
+    private List<ICommand> commands = new List<ICommand>();
 
-    public List<Command> Commands
+    public List<ICommand> Commands
     {
         get => commands;
     }
@@ -40,14 +40,14 @@ public class Robot
         isOn = false;
     }
 
-    public void AddCommand(Command command)
+    public void AddCommand(ICommand command)
     {
         commands.Add(command);
     }
 
     public void ExecuteCommands()
     {
-        foreach (Command command in commands)
+        foreach (ICommand command in commands)
         {
             command.Execute(this);
             string status = isOn ? "is on" : "is off";

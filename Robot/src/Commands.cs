@@ -1,24 +1,29 @@
 namespace Robot;
 
-public class TurnOn : Command
+public interface ICommand
 {
-    public override void Execute(Robot robot)
+    void Execute(Robot robot);
+}
+
+public class TurnOn : ICommand
+{
+    public void Execute(Robot robot)
     {
         robot.IsOn = true;
     }
 }
 
-public class TurnOff : Command
+public class TurnOff : ICommand
 {
-    public override void Execute(Robot robot)
+    public void Execute(Robot robot)
     {
         robot.IsOn = false;
     }
 }
 
-public class MoveUp : Command
+public class MoveUp : ICommand
 {
-    public override void Execute(Robot robot)
+    public void Execute(Robot robot)
     {
         if (robot.IsOn)
         {
@@ -27,9 +32,9 @@ public class MoveUp : Command
     }
 }
 
-public class MoveDown : Command
+public class MoveDown : ICommand
 {
-    public override void Execute(Robot robot)
+    public void Execute(Robot robot)
     {
         if (robot.IsOn)
         {
@@ -38,9 +43,9 @@ public class MoveDown : Command
     }
 }
 
-public class MoveLeft : Command
+public class MoveLeft : ICommand
 {
-    public override void Execute(Robot robot)
+    public void Execute(Robot robot)
     {
         if (robot.IsOn)
         {
@@ -49,9 +54,9 @@ public class MoveLeft : Command
     }
 }
 
-public class MoveRight : Command
+public class MoveRight : ICommand
 {
-    public override void Execute(Robot robot)
+    public void Execute(Robot robot)
     {
         if (robot.IsOn)
         {
