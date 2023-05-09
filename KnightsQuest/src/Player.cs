@@ -6,7 +6,7 @@ public class Player {
     public int experience = 0;
     public int xpToNextLevel = 100;
     
-    public List<Item> Inventory = new List<Item>();
+    public List<Item> inventory = new List<Item>();
 
 
     public override string ToString()

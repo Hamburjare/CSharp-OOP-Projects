@@ -12,7 +12,7 @@ public class GameLoop
 
     Shop shop = new Shop();
 
-    public static Player player = new Player();
+    public Player player = new Player();
 
     string savePath = @"saves\save.json";
 
@@ -65,8 +65,6 @@ public class GameLoop
             // items.Add(new Item("Shrubbery", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // items.Add(new Item("Grail", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // items.Add(new Item("Rabbit's Foot", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-
-            player.knights.Add(knights[0]);
 
             // Create save
             save = new Save(player, monsters, items, knights);
