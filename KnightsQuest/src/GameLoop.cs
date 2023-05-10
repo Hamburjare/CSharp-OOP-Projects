@@ -14,9 +14,13 @@ public class GameLoop
 
     public Player player = new Player();
 
+    public Fight fight = new Fight();
+
     string savePath = @"saves\save.json";
 
     public static GameLoop Instance { get; private set; } = null!;
+
+    Knight? enabledKnight;
 
     public GameLoop()
     {
@@ -59,7 +63,10 @@ public class GameLoop
             // monsters.Add(new Monster("Tim the Enchanter", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // monsters.Add(new Monster("Killer Rabbit of Caerbannog", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // // Create items
-            items.Add(new Item());
+            items.Add((Item)new WoodSword());
+            items.Add((Item)new WoodShield());
+            items.Add((Item)new SilverShield());
+            items.Add((Item)new SilverSword());
             // items.Add(new Item("Holy Hand Grenade", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // items.Add(new Item("Coconut", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
             // items.Add(new Item("Shrubbery", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
@@ -93,6 +100,29 @@ public class GameLoop
         Console.WriteLine("Game saved!");
     }
 
+    Knight SelectKnight() 
+    {
+        Console.WriteLine("Select a knight:");
+        for (int i = 0; i < knights.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {knights[i].name}");
+        }
+
+        var input = Console.ReadLine();
+
+        if (int.TryParse(input, out int index))
+        {
+            if (index > 0 && index <= knights.Count)
+            {
+                knights[index - 1].inUse = true;
+                return knights[index - 1];
+            }
+        }
+
+        Console.WriteLine("Invalid input");
+        return SelectKnight();
+    }
+
     public void Run()
     {
         bool running = true;
@@ -101,6 +131,19 @@ public class GameLoop
 
         while (running)
         {
+            foreach (var knight in knights)
+            {
+                if (knight.inUse)
+                {
+                    enabledKnight = knight;
+                }
+            }
+
+            if (enabledKnight == null)
+            {
+                enabledKnight = SelectKnight();
+            }
+
             Console.WriteLine(player.ToString());
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Fight");
@@ -114,7 +157,7 @@ public class GameLoop
             switch (input)
             {
                 case "1":
-                    // Fight();
+                    fight.SelectMonster(enabledKnight!);
                     break;
                 case "2":
                     shop.ShopLoop();
@@ -124,7 +167,7 @@ public class GameLoop
                     break;
                 case "4":
                     Save();
-                    running = false;                                      
+                    running = false;
                     break;
                 default:
                     Console.WriteLine("Invalid input");

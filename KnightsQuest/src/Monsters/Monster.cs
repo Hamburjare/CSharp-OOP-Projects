@@ -1,11 +1,16 @@
 namespace KnightsQuest;
 
-public class Monster {
-    public virtual string? Name { get; set; }
-    public virtual int Health { get; set; }
-    public virtual int MaxAttack { get; set; }
-    public virtual int MinAttack { get; set; }
-    public virtual int MaxDefense { get; set; }
-    public virtual int MinDefense { get; set; }
-    public virtual int MinLevel { get; set; }
- }
+public class Monster
+{
+    public virtual string? name { get; set; }
+    public virtual int health { get; set; }
+    public virtual int defaultHealth { get; set; }
+    public virtual int maxAttack { get; set; }
+    public virtual int minAttack { get; set; }
+    public virtual int minLevel { get; set; }
+
+    public override string ToString()
+    {
+        return $"{name} (Health: {health}) (Attack: {minAttack}-{maxAttack}) (You need to be: {minLevel} level to fight this monster)";
+    }
+}
