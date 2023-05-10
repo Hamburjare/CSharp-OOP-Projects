@@ -2,7 +2,6 @@ namespace KnightsQuest;
 
 public class Shop
 {
-
     public void ShopLoop()
     {
         Console.WriteLine("Welcome to the shop!");
@@ -40,17 +39,20 @@ public class Shop
         {
             if (GameLoop.Instance.knights[i].inUse && GameLoop.Instance.knights[i].owned)
             {
-                Console.WriteLine($"{i + 1}. {GameLoop.Instance.knights[i].name} (Owned) (In Use)");
+                Console.WriteLine(
+                    $"{i + 1}. {GameLoop.Instance.knights[i].ToString()} (Owned) (In Use)"
+                );
             }
             else if (GameLoop.Instance.knights[i].owned)
             {
-                Console.WriteLine($"{i + 1}. {GameLoop.Instance.knights[i].name} (Owned)");
+                Console.WriteLine($"{i + 1}. {GameLoop.Instance.knights[i].ToString()} (Owned)");
             }
             else
             {
-                Console.WriteLine($"{i + 1}. {GameLoop.Instance.knights[i].name} ({GameLoop.Instance.knights[i].price} gold)");
+                Console.WriteLine(
+                    $"{i + 1}. {GameLoop.Instance.knights[i].ToString()} ({GameLoop.Instance.knights[i].price} gold)"
+                );
             }
-
         }
         Console.WriteLine($"{GameLoop.Instance.knights.Count + 1}. Exit");
         string? input = Console.ReadLine();
@@ -59,18 +61,23 @@ public class Shop
         if (index == GameLoop.Instance.knights.Count)
         {
             GameLoop.Instance.Save();
-            GameLoop.Instance.Save();
             ShopLoop();
         }
         else if (index < GameLoop.Instance.knights.Count)
         {
             if (GameLoop.Instance.knights[index].owned)
             {
-                Console.WriteLine("You already own this knight");
+                Console.WriteLine(
+                    $"You already own {GameLoop.Instance.knights[index].name} and have set it as your active knight"
+                );
+                foreach (var knight in GameLoop.Instance.knights)
+                {
+                    knight.inUse = false;
+                }
+                GameLoop.Instance.knights[index].inUse = true;
                 GameLoop.Instance.Save();
                 ShopLoop();
             }
-
             else if (GameLoop.Instance.player.gold >= GameLoop.Instance.knights[index].price)
             {
                 GameLoop.Instance.player.gold -= GameLoop.Instance.knights[index].price;
@@ -107,7 +114,22 @@ public class Shop
         Console.WriteLine("What would you like to buy?");
         for (int i = 0; i < GameLoop.Instance.items.Count; i++)
         {
-            Console.WriteLine($"{i + 1}. {GameLoop.Instance.items[i].name} - {GameLoop.Instance.items[i].price} gold");
+            if (GameLoop.Instance.items[i].inUse && GameLoop.Instance.items[i].owned)
+            {
+                Console.WriteLine(
+                    $"{i + 1}. {GameLoop.Instance.items[i].ToString()} (Owned) (In Use)"
+                );
+            }
+            else if (GameLoop.Instance.items[i].owned)
+            {
+                Console.WriteLine($"{i + 1}. {GameLoop.Instance.items[i].ToString()} (Owned)");
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"{i + 1}. {GameLoop.Instance.items[i].ToString()} ({GameLoop.Instance.items[i].price} gold)"
+                );
+            }
         }
         Console.WriteLine($"{GameLoop.Instance.items.Count + 1}. Exit");
         string? input = Console.ReadLine();
@@ -120,11 +142,37 @@ public class Shop
         }
         else if (index < GameLoop.Instance.items.Count)
         {
-            if (GameLoop.Instance.player.gold >= GameLoop.Instance.items[index].price)
+            if (GameLoop.Instance.items[index].owned)
+            {
+                Console.WriteLine(
+                    $"You already own {GameLoop.Instance.items[index].name} and have set it as your active item"
+                );
+                foreach (var item in GameLoop.Instance.items)
+                {
+                    item.inUse = false;
+                }
+                GameLoop.Instance.items[index].inUse = true;
+                GameLoop.Instance.Save();
+                ShopLoop();
+            }
+            else if (GameLoop.Instance.player.gold >= GameLoop.Instance.items[index].price)
             {
                 GameLoop.Instance.player.gold -= GameLoop.Instance.items[index].price;
-                GameLoop.Instance.player.inventory.Add(GameLoop.Instance.items[index]);
-                Console.WriteLine($"You bought {GameLoop.Instance.items[index].name} for {GameLoop.Instance.items[index].price} gold");
+                Console.WriteLine(
+                    $"You bought {GameLoop.Instance.items[index].name} for {GameLoop.Instance.items[index].price} gold and added it to your inventory"
+                );
+
+                foreach (var item in GameLoop.Instance.items)
+                {
+                    if (item.type == GameLoop.Instance.items[index].type)
+                    {
+                        item.inUse = false;
+                    }
+                }
+
+                GameLoop.Instance.items[index].owned = true;
+                GameLoop.Instance.items[index].inUse = true;
+
                 GameLoop.Instance.Save();
                 ShopLoop();
             }
@@ -145,29 +193,36 @@ public class Shop
 
     public void Sell()
     {
-        Console.WriteLine("What would you like to sell?");
-        for (int i = 0; i < GameLoop.Instance.player.inventory.Count; i++)
+        List<Item> ownedItems = new List<Item>();
+        foreach (var item in GameLoop.Instance.items)
         {
-            Console.WriteLine(
-                $"{i + 1}. {GameLoop.Instance.player.inventory[i].name} - {GameLoop.Instance.player.inventory[i].price} gold"
-            );
+            if (item.owned && item.price > 0)
+            {
+                ownedItems.Add(item);
+            }
         }
-        Console.WriteLine($"{GameLoop.Instance.player.inventory.Count + 1}. Exit");
+        Console.WriteLine("What would you like to sell?");
+        for (int i = 0; i < ownedItems.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {ownedItems[i].name} - {ownedItems[i].price} gold");
+        }
+        Console.WriteLine($"{ownedItems.Count + 1}. Exit");
         string? input = Console.ReadLine();
         Console.Clear();
         int index = int.Parse(input!) - 1;
-        if (index == GameLoop.Instance.player.inventory.Count)
+        if (index == ownedItems.Count)
         {
             GameLoop.Instance.Save();
             ShopLoop();
         }
-        else if (index < GameLoop.Instance.player.inventory.Count)
+        else if (index < ownedItems.Count)
         {
-            GameLoop.Instance.player.gold += GameLoop.Instance.player.inventory[index].price;
+            GameLoop.Instance.player.gold += ownedItems[index].price;
             Console.WriteLine(
-                $"You sold {GameLoop.Instance.player.inventory[index].name} for {GameLoop.Instance.player.inventory[index].price} gold"
+                $"You sold {ownedItems[index].name} for {ownedItems[index].price} gold"
             );
-            GameLoop.Instance.player.inventory.RemoveAt(index);
+            GameLoop.Instance.items.Find(item => item.name == ownedItems[index].name).owned = false;
+            GameLoop.Instance.items.Find(item => item.name == ownedItems[index].name).inUse = false;
             GameLoop.Instance.Save();
             ShopLoop();
         }
