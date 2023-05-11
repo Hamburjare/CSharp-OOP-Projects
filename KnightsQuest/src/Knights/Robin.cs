@@ -13,8 +13,14 @@ public class Robin : Knight
     public override int minDefense { get; set; } = 2;
     public override int price { get; set; } = 100;
 
-    public override string ToString()
+    public override void Use()
     {
-        return name!;
+        foreach (var knight in GameLoop.Instance.knights)
+        {
+            knight.inUse = false;
+        }
+        inUse = true;
+
+        Console.WriteLine($"You are now using {name}.");
     }
 }

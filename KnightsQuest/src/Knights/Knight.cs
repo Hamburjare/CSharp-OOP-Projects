@@ -1,6 +1,6 @@
 namespace KnightsQuest;
 
-public class Knight
+public abstract class Knight
 {
     public virtual bool owned { get; set; }
     public virtual bool inUse { get; set; }
@@ -17,4 +17,6 @@ public class Knight
     {
         return $"{name} ({price} gold) (Health: {health}) (Attack: {minAttack}-{maxAttack}) (Defense: {minDefense}-{maxDefense})";
     }
+
+    public abstract void Use();
 }

@@ -20,87 +20,36 @@ public class GameLoop
 
     public static GameLoop Instance { get; private set; } = null!;
 
-    Knight? enabledKnight;
+    public Knight? enabledKnight;
+
+    Inventory inventory = new Inventory();
 
     public GameLoop()
     {
         Instance = this;
-        Save save;
 
-        // Load save file
-        // If no save file, create new game
-        // If save file, load game
-        // Run game loop
-        // Save game
+        // Create new game
 
-        if (File.Exists(savePath))
-        {
-            save = JsonConvert.DeserializeObject<Save>(File.ReadAllText(savePath))!;
+        // Create player
+        player = new Player();
 
-            player = save.player;
-            knights = save.knights;
-            monsters = save.monsters;
-            items = save.items;
-        }
-        else
-        {
-            // Create new game
-            // Create player
-            player = new Player();
-            // Create knights
-            knights.Add((Knight)new Lancelot());
-            knights.Add((Knight)new Robin());
-            // knights.Add(new Knight("Sir Robin", 100, 10, 10, 10, new(), new(), 10, 10, 10));
-            // knights.Add(new Knight("Sir Galahad", 100, 10, 10, 10, new(), new(), 10, 10, 10));
-            // knights.Add(new Knight("Sir Bedevere", 100, 10, 10, 10, new(), new(), 10, 10, 10));
-            // knights.Add(new Knight("King Arthur", 100, 10, 10, 10, new(), new(), 10, 10, 10));
-            // Create monsters
-            monsters.Add((Monster)new Rabbit());
-            monsters.Add((Monster)new BlackKnight());
-            // monsters.Add(new Monster("Rabbit", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // monsters.Add(new Monster("Black Knight", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // monsters.Add(new Monster("French Taunter", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // monsters.Add(new Monster("Tim the Enchanter", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // monsters.Add(new Monster("Killer Rabbit of Caerbannog", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // // Create items
-            items.Add((Item)new WoodSword());
-            items.Add((Item)new WoodShield());
-            items.Add((Item)new SilverShield());
-            items.Add((Item)new SilverSword());
-            // items.Add(new Item("Holy Hand Grenade", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // items.Add(new Item("Coconut", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // items.Add(new Item("Shrubbery", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // items.Add(new Item("Grail", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
-            // items.Add(new Item("Rabbit's Foot", 100, 10, 10, 10, 10, 10, 10, 10, 10, 10));
+        // Create knights
+        knights.Add((Knight)new Lancelot());
+        knights.Add((Knight)new Robin());
 
-            // Create save
-            save = new Save(player, monsters, items, knights);
+        // Create monsters
+        monsters.Add((Monster)new Rabbit());
+        monsters.Add((Monster)new BlackKnight());
 
-            var saveContent = JsonConvert.SerializeObject(save);
-
-            Console.WriteLine(saveContent);
-
-            // Save game
-            Save();
-        }
+        // Create items
+        items.Add((Item)new HealthPotion());
+        items.Add((Item)new WoodSword());
+        items.Add((Item)new WoodShield());
+        items.Add((Item)new SilverShield());
+        items.Add((Item)new SilverSword());
     }
 
-    public void Save()
-    {
-        Save save = new Save(player, monsters, items, knights);
-
-        // Save game
-
-        // Create save directory if it doesn't exist
-        if (!Directory.Exists(Path.GetDirectoryName(savePath)))
-            Directory.CreateDirectory(Path.GetDirectoryName(savePath)!);
-
-        File.WriteAllText(savePath, JsonConvert.SerializeObject(save));
-
-        Console.WriteLine("Game saved!");
-    }
-
-    Knight SelectKnight() 
+    Knight SelectKnight()
     {
         Console.WriteLine("Select a knight:");
         for (int i = 0; i < knights.Count; i++)
@@ -145,10 +94,11 @@ public class GameLoop
             }
 
             Console.WriteLine(player.ToString());
+            Console.WriteLine($"You are playing as {enabledKnight.name}");
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Fight");
             Console.WriteLine("2. Shop");
-            Console.WriteLine("3. Save");
+            Console.WriteLine("3. Inventory");
             Console.WriteLine("4. Quit");
 
             var input = Console.ReadLine();
@@ -157,16 +107,44 @@ public class GameLoop
             switch (input)
             {
                 case "1":
+                    if (enabledKnight.health < enabledKnight.defaultHealth)
+                    {
+                        if (items.Find(item => item.name == "Health Potion").owned)
+                        {
+                            Console.WriteLine(
+                                "Your knight does not have full health, would you like to use a health potion? (y/n)"
+                            );
+                            var potionInput = Console.ReadLine();
+                            if (potionInput.ToLower() == "y")
+                            {
+                                items.Find(item => item.name == "Health Potion").Use();
+                            }
+                            Console.Clear();
+                        }
+                        else
+                        {
+                            Console.WriteLine(
+                                "Your knight does not have full health and you do not have any health potions."
+                            );
+                            Console.WriteLine("Do you want to continue anyway? (y/n)");
+                            var potionInput = Console.ReadLine();
+                            if (potionInput.ToLower() == "n")
+                            {
+                                Console.Clear();
+                                break;
+                            }
+                            Console.Clear();
+                        }
+                    }
                     fight.SelectMonster(enabledKnight!);
                     break;
                 case "2":
                     shop.ShopLoop();
                     break;
                 case "3":
-                    Save();
+                    inventory.InventoryLoop();
                     break;
                 case "4":
-                    Save();
                     running = false;
                     break;
                 default:

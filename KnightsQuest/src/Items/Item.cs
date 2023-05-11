@@ -7,7 +7,7 @@ public enum ItemType
 }
 
 
-public class Item {
+public abstract class Item {
     public virtual bool inUse { get; set; } = false;
     public virtual bool owned { get; set; } = false;
     public virtual ItemType type { get; set; }
@@ -20,4 +20,7 @@ public class Item {
     {
         return $"{name} ({price} gold) (Attack: {attackMultiplier}) (Defense: {defenseMultiplier})";
     }
+
+    public abstract void Use();
+
 }

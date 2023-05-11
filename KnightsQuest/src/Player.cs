@@ -2,7 +2,7 @@ namespace KnightsQuest;
 
 public class Player {
     public int gold = 99999;
-    public int level = 0;
+    public int level = 5;
     public int experience = 0;
     public int xpToNextLevel = 100;
 

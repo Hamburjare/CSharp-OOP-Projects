@@ -32,7 +32,6 @@ public class Fight
             int index = int.Parse(input!) - 1;
             if (index == GameLoop.Instance.monsters.Count)
             {
-                GameLoop.Instance.Save();
                 return;
             }
             else if (index < GameLoop.Instance.monsters.Count)
@@ -81,9 +80,8 @@ public class Fight
         isFighting = true;
     }
 
-    void ResetHealths(Knight knight, Monster monster)
+    void ResetHealths(Monster monster)
     {
-        GameLoop.Instance.knights.Find(k => k.name == knight.name).health = knight.defaultHealth;
         GameLoop.Instance.monsters.Find(m => m.name == monster.name).health = monster.defaultHealth;
     }
 
@@ -92,17 +90,27 @@ public class Fight
         // Check if knight is dead
         if (knight.health <= 0)
         {
-            ResetHealths(knight, monster);
+            if(GameLoop.Instance.items.Find(item => item.name == "Health Potion").owned) {
+                Console.WriteLine("You have a health potion! Would you like to use it? (y/n)");
+                string? input = Console.ReadLine();
+                if (input == "y")
+                {
+                    GameLoop.Instance.items.Find(item => item.name == "Health Potion").Use();
+                    Console.WriteLine("You used a health potion!");
+                    return;
+                }
+            } 
+
+            ResetHealths(monster);
             Console.Clear();
             Console.WriteLine($"{knight.name} has died!");
             isFighting = false;
-            GameLoop.Instance.Save();
         }
 
         // Check if monster is dead
         if (monster.health <= 0)
         {
-            ResetHealths(knight, monster);
+            ResetHealths(monster);
             Console.Clear();
             Console.WriteLine($"{monster.name} has died!");
             isFighting = false;
@@ -113,7 +121,6 @@ public class Fight
 
             Console.WriteLine($"You gained {xp} experience!");
             Console.WriteLine($"You gained {gold} gold!");
-            GameLoop.Instance.Save();
         }
     }
 
