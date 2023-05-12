@@ -96,7 +96,6 @@ public class Fight
                 if (input == "y")
                 {
                     GameLoop.Instance.items.Find(item => item.name == "Health Potion").Use();
-                    Console.WriteLine("You used a health potion!");
                     return;
                 }
             } 

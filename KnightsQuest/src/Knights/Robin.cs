@@ -23,4 +23,13 @@ public class Robin : Knight
 
         Console.WriteLine($"You are now using {name}.");
     }
+
+    public override void Buy()
+    {
+        GameLoop.Instance.player.gold -= price;
+        owned = true;
+        Console.WriteLine(
+            $"You bought {name} for {price} gold. You can equip it in the inventory."
+        );
+    }
 }

@@ -19,4 +19,6 @@ public abstract class Knight
     }
 
     public abstract void Use();
+
+    public abstract void Buy();
 }

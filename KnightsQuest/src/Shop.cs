@@ -49,9 +49,7 @@ public class Shop
             }
             else
             {
-                Console.WriteLine(
-                    $"{i + 1}. {GameLoop.Instance.knights[i].ToString()}"
-                );
+                Console.WriteLine($"{i + 1}. {GameLoop.Instance.knights[i].ToString()}");
             }
         }
         Console.WriteLine($"{GameLoop.Instance.knights.Count + 1}. Go Back");
@@ -66,21 +64,13 @@ public class Shop
         {
             if (GameLoop.Instance.knights[index].owned)
             {
-                Console.WriteLine(
-                    $"You already own {GameLoop.Instance.knights[index].name}."
-                );
+                Console.WriteLine($"You already own {GameLoop.Instance.knights[index].name}.");
                 ShopLoop();
             }
             else if (GameLoop.Instance.player.gold >= GameLoop.Instance.knights[index].price)
             {
-                GameLoop.Instance.player.gold -= GameLoop.Instance.knights[index].price;
+                GameLoop.Instance.knights[index].Buy();
 
-                GameLoop.Instance.knights[index].owned = true;
-                GameLoop.Instance.knights[index].Use();
-
-                Console.WriteLine(
-                    $"You bought {GameLoop.Instance.knights[index].name} for {GameLoop.Instance.knights[index].price} gold and set it as your active knight"
-                );
                 ShopLoop();
             }
             else
@@ -113,9 +103,7 @@ public class Shop
             }
             else
             {
-                Console.WriteLine(
-                    $"{i + 1}. {GameLoop.Instance.items[i].ToString()}"
-                );
+                Console.WriteLine($"{i + 1}. {GameLoop.Instance.items[i].ToString()}");
             }
         }
         Console.WriteLine($"{GameLoop.Instance.items.Count + 1}. Go Back");
@@ -130,20 +118,12 @@ public class Shop
         {
             if (GameLoop.Instance.items[index].owned)
             {
-                Console.WriteLine(
-                    $"You already own {GameLoop.Instance.items[index].name}."
-                );
+                Console.WriteLine($"You already own {GameLoop.Instance.items[index].name}.");
                 ShopLoop();
             }
             else if (GameLoop.Instance.player.gold >= GameLoop.Instance.items[index].price)
             {
-                GameLoop.Instance.player.gold -= GameLoop.Instance.items[index].price;
-                Console.WriteLine(
-                    $"You bought {GameLoop.Instance.items[index].name} for {GameLoop.Instance.items[index].price} gold and added it to your inventory"
-                );
-
-                GameLoop.Instance.items[index].owned = true;
-                GameLoop.Instance.items[index].Use();
+                GameLoop.Instance.items[index].Buy();
 
                 ShopLoop();
             }

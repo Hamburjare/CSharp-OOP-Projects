@@ -23,4 +23,6 @@ public abstract class Item {
 
     public abstract void Use();
 
+    public abstract void Buy();
+
 }

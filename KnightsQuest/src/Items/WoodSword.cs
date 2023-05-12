@@ -20,4 +20,13 @@ public class WoodSword : Item
 
         inUse = true;
     }
+
+    public override void Buy()
+    {
+        GameLoop.Instance.player.gold -= price;
+        owned = true;
+        Console.WriteLine(
+            $"You bought a {name} for {price} gold. You can equip it in the inventory."
+        );
+    }
 }
