@@ -2,6 +2,7 @@ namespace KnightsQuest;
 
 public class Robin : Knight
 {
+    // Variables
     public override bool owned { get; set; } = false;
     public override bool inUse { get; set; } = false;
     public override string? name { get; set; } = "Sir Robin";
@@ -13,23 +14,28 @@ public class Robin : Knight
     public override int minDefense { get; set; } = 2;
     public override int price { get; set; } = 100;
 
-    public override void Use()
+    // Methods
+
+    public override void Attack(Monster monster)
     {
-        foreach (var knight in GameLoop.Instance.knights)
+        Random random = new Random();
+        int damage = random.Next(minAttack, maxAttack);
+
+        // Robin has a 50% chance to deal double damage
+        if (random.Next(0, 2) == 0)
         {
-            knight.inUse = false;
+            damage *= 2;
+            Console.WriteLine($"{name} attacked {monster.name} for {damage} damage! Critical hit!");
         }
-        inUse = true;
+        else
+        {
+            Console.WriteLine($"{name} attacked {monster.name} for {damage} damage!");
+        }
 
-        Console.WriteLine($"You are now using {name}.");
-    }
-
-    public override void Buy()
-    {
-        GameLoop.Instance.player.gold -= price;
-        owned = true;
-        Console.WriteLine(
-            $"You bought {name} for {price} gold. You can equip it in the inventory."
-        );
+        monster.health -= damage;
+        if (monster.health < 0)
+        {
+            monster.health = 0;
+        }
     }
 }

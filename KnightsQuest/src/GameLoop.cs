@@ -16,8 +16,6 @@ public class GameLoop
 
     public Fight fight = new Fight();
 
-    string savePath = @"saves\save.json";
-
     public static GameLoop Instance { get; private set; } = null!;
 
     public Knight? enabledKnight;
@@ -36,10 +34,12 @@ public class GameLoop
         // Create knights
         knights.Add((Knight)new Lancelot());
         knights.Add((Knight)new Robin());
+        knights.Add((Knight)new KingArthur());
 
         // Create monsters
         monsters.Add((Monster)new Rabbit());
         monsters.Add((Monster)new BlackKnight());
+        monsters.Add((Monster)new FrenchTaunter());
 
         // Create items
         items.Add((Item)new HealthPotion());
@@ -72,6 +72,12 @@ public class GameLoop
         return SelectKnight();
     }
 
+    public void PrintStats()
+    {
+        Console.WriteLine(player.ToString());
+        Console.WriteLine($"You are playing as {enabledKnight!.name}");
+    }
+
     public void Run()
     {
         bool running = true;
@@ -93,8 +99,7 @@ public class GameLoop
                 enabledKnight = SelectKnight();
             }
 
-            Console.WriteLine(player.ToString());
-            Console.WriteLine($"You are playing as {enabledKnight.name}");
+            PrintStats();
             Console.WriteLine("What would you like to do?");
             Console.WriteLine("1. Fight");
             Console.WriteLine("2. Shop");
@@ -109,15 +114,15 @@ public class GameLoop
                 case "1":
                     if (enabledKnight.health < enabledKnight.defaultHealth)
                     {
-                        if (items.Find(item => item.name == "Health Potion").owned)
+                        if (items.Find(item => item.name == "Health Potion")!.owned)
                         {
                             Console.WriteLine(
                                 "Your knight does not have full health, would you like to use a health potion? (y/n)"
                             );
                             var potionInput = Console.ReadLine();
-                            if (potionInput.ToLower() == "y")
+                            if (potionInput!.ToLower() == "y")
                             {
-                                items.Find(item => item.name == "Health Potion").Use();
+                                items.Find(item => item.name == "Health Potion")!.Use();
                             }
                             Console.Clear();
                         }
@@ -128,7 +133,7 @@ public class GameLoop
                             );
                             Console.WriteLine("Do you want to continue anyway? (y/n)");
                             var potionInput = Console.ReadLine();
-                            if (potionInput.ToLower() == "n")
+                            if (potionInput!.ToLower() == "n")
                             {
                                 Console.Clear();
                                 break;

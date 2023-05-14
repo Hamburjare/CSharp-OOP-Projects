@@ -1,14 +1,18 @@
 namespace KnightsQuest;
 
-public class BlackKnight : Monster
+public class FrenchTaunter : Monster
 {
-    public override string? name { get; set; } = "Black Knight";
-    public override int health { get; set; } = 120;
-    public override int defaultHealth { get; set; } = 120;
-    public override int maxAttack { get; set; } = 20;
-    public override int minAttack { get; set; } = 5;
-    public override int minLevel { get; set; } = 5;
+    public override string? name { get; set; } = "French Taunter";
+    public override int health { get; set; } = 150;
+    public override int defaultHealth { get; set; } = 150;
+    public override int maxAttack { get; set; } = 25;
+    public override int minAttack { get; set; } = 10;
+    public override int minLevel { get; set; } = 10;
+    public int mana { get; set; } = 100;
 
+    /// <summary>
+    /// Monster attacks knight.
+    /// </summary>
     public override void Attack(Knight knight)
     {
         Random random = new Random();
@@ -45,9 +49,21 @@ public class BlackKnight : Monster
                 break;
             case 5:
                 defence = 0;
+                mana -= 10;
                 damage -= defence;
 
-                Console.WriteLine($"{name} broke through {knight.name}'s defence! {name} attacked {knight.name} for {damage} damage!");
+                Console.WriteLine(
+                    $"{name} broke through {knight.name}'s defence! {name} attacked {knight.name} for {damage} damage! {name} lost 10 mana and now has {mana} mana."
+                );
+                break;
+            case 6:
+                mana -= 10;
+                damage = damage * 2;
+                damage -= defence;
+
+                Console.WriteLine(
+                    $"{name} broke through {knight.name}'s defence! {name} lost 10 mana and made a crit for {damage} damage!"
+                );
                 break;
             default:
                 damage -= defence;
@@ -55,8 +71,6 @@ public class BlackKnight : Monster
                 Console.WriteLine($"{name} attacked {knight.name} for {damage} damage!");
                 break;
         }
-
-        damage -= defence;
 
         knight.health -= damage;
 

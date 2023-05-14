@@ -1,6 +1,6 @@
 namespace KnightsQuest;
 
-public class Monster
+public abstract class Monster
 {
     public virtual string? name { get; set; }
     public virtual int health { get; set; }
@@ -13,4 +13,6 @@ public class Monster
     {
         return $"{name} (Health: {health}) (Attack: {minAttack}-{maxAttack}) (You need to be: {minLevel} level to fight this monster)";
     }
+
+    public abstract void Attack(Knight knight);
 }
