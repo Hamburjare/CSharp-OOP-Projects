@@ -1,4 +1,3 @@
-# Kalle Suikkari
 ## INSTALLATION
 1. Install [.NET Core](https://www.microsoft.com/net/core)
 2. Clone the repository
